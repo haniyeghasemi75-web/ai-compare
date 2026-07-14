@@ -30,7 +30,7 @@ interface EvaluatedResult {
   matchedWeaknesses: string[];
   topReasons: string[];
   decisionSummary: string;
-  scoreDiff: number | null;
+  scoreDiff: number | null; // تایپ تصحیح شد تا تداخل برطرف شود
 }
 
 const compareGoalsList = [
@@ -122,7 +122,7 @@ export default function CustomAICrossComparator() {
       ? aiBrandsDatabase.filter(b => selectedAIBrands.includes(b.id))
       : aiBrandsDatabase;
 
-    let evaluatedList = targetsToEvaluate.map((brand) => {
+    let evaluatedList: EvaluatedResult[] = targetsToEvaluate.map((brand) => {
       let totalWeightsSum = 0;
       let weightedScoresSum = 0;
 
@@ -201,7 +201,6 @@ export default function CustomAICrossComparator() {
   return (
     <main className="bg-gray-50 min-h-screen text-gray-800 p-4 md:p-8 flex flex-col items-center justify-center font-['Yekan_Bakh',sans-serif]" dir="rtl">
       
-      {/* مرحله خانه: منوی اصلی مینیمال روشن */}
       {!appMode && (
         <div className="max-w-xl w-full bg-white p-8 rounded-xl border border-gray-200 text-center shadow-sm">
           <span className="text-gray-400 text-xs font-bold tracking-wider font-mono">NUMBERLAND AI</span>
@@ -230,7 +229,6 @@ export default function CustomAICrossComparator() {
         </div>
       )}
 
-      {/* بخش فرم‌ها و مراحل ویزارد */}
       {appMode && (
         <div className="max-w-xl w-full">
           {((appMode === "compare" && step < 5) || (appMode === "recommend" && step < 4)) && (
@@ -245,7 +243,6 @@ export default function CustomAICrossComparator() {
           {((appMode === "compare" && step < 5) || (appMode === "recommend" && step < 4)) && (
             <div className="bg-white p-6 md:p-8 rounded-b-xl border-b border-x border-gray-200 shadow-sm mb-6">
               
-              {/* مود مقایسه - گام ۱: انتخاب برندها */}
               {appMode === "compare" && step === 1 && (
                 <div>
                   <h3 className="text-sm font-bold text-gray-900 mb-4">کدام مدل‌ها را مقایسه کنیم؟ (۲ یا ۳ مورد)</h3>
@@ -283,14 +280,13 @@ export default function CustomAICrossComparator() {
                 </div>
               )}
 
-              {/* مود مقایسه - گام ۲: هدف اصلی */}
               {appMode === "compare" && step === 2 && (
                 <div>
                   <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
                     <p className="text-xs text-gray-600">شما <span className="text-gray-900 font-bold">{getSelectedBrandsText()}</span> را انتخاب کرده‌اید.</p>
                   </div>
 
-                  <h3 className="text-sm font-bold text-gray-900 mb-4">هدف اصلی شما از مقایسه چیست؟</h3>
+                  <h3 className="text-sm font-bold text-gray-900 mb-4">هدف اصلی شما از مقایسه چیست幕؟</h3>
                   
                   <div className="grid grid-cols-2 gap-2">
                     {compareGoalsList.map((goal) => (
@@ -310,7 +306,6 @@ export default function CustomAICrossComparator() {
                 </div>
               )}
 
-              {/* مود پیشنهاد - گام ۱: انتخاب تخصص */}
               {appMode === "recommend" && step === 1 && (
                 <div>
                   <h3 className="text-sm font-bold text-gray-900 mb-4">حوزه فعالیت یا تخصص خود را مشخص کنید:</h3>
@@ -328,7 +323,6 @@ export default function CustomAICrossComparator() {
                 </div>
               )}
 
-              {/* مود پیشنهاد - گام ۲: سوالات صنف */}
               {appMode === "recommend" && step === 2 && (
                 <div className="space-y-4">
                   <h3 className="text-sm font-bold text-gray-900 mb-2">تنظیم اولویت‌ها بر اساس نیازمندی‌های شما</h3>
@@ -368,7 +362,6 @@ export default function CustomAICrossComparator() {
                 </div>
               )}
 
-              {/* مود پیشنهاد - گام ۳: معیارهای عمومی */}
               {appMode === "recommend" && step === 3 && (
                 <div className="space-y-4">
                   <h3 className="text-sm font-bold text-gray-900 mb-2">ترجیحات عمومی کاربری</h3>
@@ -412,12 +405,11 @@ export default function CustomAICrossComparator() {
         </div>
       )}
 
-      {/* مرحله پایانی: کارنامه نهایی انطباق مینیمال و لایت */}
       {((appMode === "compare" && step === 5) || (appMode === "recommend" && step === 4)) && comparisonResults.length > 0 && (
         <div className="max-w-xl w-full bg-white p-6 md:p-8 rounded-xl border border-gray-200 shadow-sm my-6">
           
           <div className="text-center border-b border-gray-150 pb-5 mb-6">
-            <h2 className="text-xl font-bold text-gray-900📊">کارنامه نهایی سنجش انطباق</h2>
+            <h2 className="text-xl font-bold text-gray-900">📊 کارنامه نهایی سنجش انطباق</h2>
             <p className="text-gray-400 text-xs mt-1">گزینه‌های ارزیابی شده بر اساس بیشترین سازگاری با نیاز شما رتبه‌بندی شده‌اند:</p>
           </div>
 
@@ -451,12 +443,10 @@ export default function CustomAICrossComparator() {
                     </div>
                   </div>
 
-                  {/* خلاصه تصمیم‌گیری کاربردی */}
                   <div className="my-2.5 p-3 bg-gray-50 rounded-lg border border-gray-150 text-[11px] text-gray-600 leading-relaxed">
                     <strong>بررسی:</strong> {item.decisionSummary}
                   </div>
 
-                  {/* دلایل اصلی تطابق */}
                   <div className="my-2.5 p-3 bg-gray-50/50 rounded-lg border border-gray-150 text-[11px]">
                     <span className="font-bold text-gray-700 block mb-1">📌 دلایل اصلی تطابق:</span>
                     <ul className="text-gray-600 space-y-1 list-disc list-inside">
@@ -464,7 +454,6 @@ export default function CustomAICrossComparator() {
                     </ul>
                   </div>
 
-                  {/* مزایا و محدودیت‌ها */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3 text-[11px]">
                     <div className="bg-gray-50 p-3 rounded-lg border border-gray-150 text-gray-600">
                       <span className="font-bold text-gray-800 block mb-1">🌟 مزایای مرتبط:</span>
@@ -481,7 +470,6 @@ export default function CustomAICrossComparator() {
                     </div>
                   </div>
 
-                  {/* نمایش پلن‌های پیشنهادی مارکت نامبرلند */}
                   {item.plans.length > 0 && (
                     <div className="mt-4 pt-3 border-t border-gray-150">
                       <span className="text-[11px] font-bold text-gray-700 block mb-2">📦 پلن‌های پیشنهادی خرید:</span>
